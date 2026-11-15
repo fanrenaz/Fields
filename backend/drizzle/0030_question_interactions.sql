@@ -1,0 +1,13 @@
+ALTER TABLE "room_interactions" DROP CONSTRAINT "room_interactions_kind_check";
+ALTER TABLE "room_interactions" DROP CONSTRAINT "room_interactions_status_check";
+ALTER TABLE "room_interactions" ADD COLUMN "interaction_json" jsonb;
+ALTER TABLE "room_interactions" ADD COLUMN "deadline_at_ms" bigint;
+ALTER TABLE "room_interactions" ADD COLUMN "claim_token" varchar(128);
+ALTER TABLE "room_interactions" ADD COLUMN "claimed_at_ms" bigint;
+ALTER TABLE "room_interactions" ADD COLUMN "resolved_at_ms" bigint;
+ALTER TABLE "room_interactions" ADD CONSTRAINT "room_interactions_kind_check" CHECK ("kind" in ('delegation_check', 'request_user_input'));
+ALTER TABLE "room_interactions" ADD CONSTRAINT "room_interactions_status_check" CHECK ("status" in ('pending', 'responding', 'approved', 'rejected', 'completed'));
+CREATE INDEX "room_interactions_due_idx" ON "room_interactions" ("deadline_at_ms", "interaction_id") WHERE "status" = 'pending' AND "deadline_at_ms" IS NOT NULL;
+ALTER TABLE "room_interaction_responses" DROP CONSTRAINT "room_interaction_responses_response_check";
+ALTER TABLE "room_interaction_responses" ADD COLUMN "response_json" jsonb;
+ALTER TABLE "room_interaction_responses" ADD CONSTRAINT "room_interaction_responses_response_check" CHECK ("response" in ('approve', 'reject', 'answer'));

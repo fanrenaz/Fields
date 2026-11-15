@@ -1,0 +1,251 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1784210400769,
+      "tag": "0000_baseline",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1784352525227,
+      "tag": "0001_company_devices",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1784531128195,
+      "tag": "0002_personal_executors",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1784534630721,
+      "tag": "0003_wise_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1784784014719,
+      "tag": "0004_personal_executor_onboarding",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1784788939346,
+      "tag": "0005_home_actor_reconciliation_backfill",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1784966400000,
+      "tag": "0006_company_runtime_cutover",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1784985165339,
+      "tag": "0007_company_runtime_cutover_repair",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1785060000000,
+      "tag": "0008_executor_custom_api_auth",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1785146400000,
+      "tag": "0009_company_assets",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1785150000000,
+      "tag": "0010_company_runtime_release_reconciliation",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1785160800000,
+      "tag": "0011_member_asset_installations",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1785164400000,
+      "tag": "0012_mail",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1785254400000,
+      "tag": "0013_company_runtime_automatic_release",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1785325200000,
+      "tag": "0014_restore_codex_executor_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1785332400000,
+      "tag": "0015_room_turn_messages",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1785412800000,
+      "tag": "0016_agent_builder",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1785499200000,
+      "tag": "0017_asset_builder",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1785585600000,
+      "tag": "0018_room_side_chat",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1785672000000,
+      "tag": "0019_static_company_runtime",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1785758400000,
+      "tag": "0020_mixed_agent_room_trigger_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1785844800000,
+      "tag": "0021_company_files",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1785931200000,
+      "tag": "0022_company_file_shares",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1786017600000,
+      "tag": "0023_remove_room_file_projections",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1786104000000,
+      "tag": "0024_executor_model_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1786190400000,
+      "tag": "0025_scheduled_tasks",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1786276800000,
+      "tag": "0026_member_memory",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1786363200000,
+      "tag": "0027_scheduled_task_target_kind",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1786449600000,
+      "tag": "0028_desktop_browser",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1786536000000,
+      "tag": "0029_invite_only_registration",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "7",
+      "when": 1786622400000,
+      "tag": "0030_question_interactions",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "7",
+      "when": 1786708800000,
+      "tag": "0031_notification_inbox",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "7",
+      "when": 1786795200000,
+      "tag": "0032_room_message_image_attachments",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "7",
+      "when": 1786881600000,
+      "tag": "0033_backend_runtime_process",
+      "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1786968000000,
+      "tag": "0034_fixed_company_runtime",
+      "breakpoints": true
+    }
+  ]
+}

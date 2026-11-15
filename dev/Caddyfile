@@ -1,0 +1,11 @@
+:3102 {
+	encode gzip zstd
+
+	handle /api/* {
+		reverse_proxy 172.17.0.1:4102
+	}
+
+	handle {
+		reverse_proxy 172.17.0.1:3103
+	}
+}

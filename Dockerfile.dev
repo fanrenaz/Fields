@@ -1,0 +1,66 @@
+FROM node:22-bookworm AS node-base
+
+USER root
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      curl \
+      g++ \
+      make \
+      tini \
+ && rm -rf /var/lib/apt/lists/*
+RUN corepack enable && corepack prepare pnpm@11.15.1 --activate
+
+WORKDIR /workspace
+RUN mkdir -p /home/node/.local/share/pnpm /workspace/node_modules \
+ && chown -R node:node /home/node/.local \
+ && chown -R node:node /workspace
+
+FROM node-base AS workspace-dependencies
+COPY --chown=node:node package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY --chown=node:node contracts/package.json ./contracts/package.json
+COPY --chown=node:node backend/package.json ./backend/package.json
+COPY --chown=node:node frontend/package.json ./frontend/package.json
+COPY --chown=node:node embodiments/simulator/package.json ./embodiments/simulator/package.json
+COPY --chown=node:node company-runtime/package.json ./company-runtime/package.json
+COPY --chown=node:node tools/eslint-config/package.json ./tools/eslint-config/package.json
+USER node
+RUN --mount=type=cache,id=fields-dev-pnpm-node,target=/home/node/.local/share/pnpm/store,uid=1000,gid=1000 \
+    pnpm install --frozen-lockfile \
+      --filter @fields/contracts... \
+      --filter @fields/backend... \
+      --filter @fields/company-runtime... \
+      --filter @fields/frontend... \
+      --filter @sticks3-call/simulator...
+USER root
+RUN install -d -o node -g node \
+      /workspace/node_modules \
+      /workspace/contracts/node_modules \
+      /workspace/backend/node_modules \
+      /workspace/frontend/node_modules \
+      /workspace/embodiments/simulator/node_modules \
+      /workspace/company-runtime/node_modules \
+      /workspace/tools/eslint-config/node_modules
+
+FROM workspace-dependencies AS workspace
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      cmake \
+      libboost-json1.81-dev \
+      libboost-system1.81-dev \
+      libssl-dev \
+ && rm -rf /var/lib/apt/lists/*
+COPY embodiments/simulator/native /tmp/fields/embodiments/simulator/native
+COPY embodiments/simulator/third_party/lvgl /tmp/fields/embodiments/simulator/third_party/lvgl
+COPY embodiments/firmware/StickS3_Call/src /tmp/fields/embodiments/firmware/StickS3_Call/src
+COPY embodiments/firmware/StickS3_Call/third_party/ArduinoJson/src /tmp/fields/embodiments/firmware/StickS3_Call/third_party/ArduinoJson/src
+COPY embodiments/firmware/StickS3_Call/third_party/M5GFX/src/lgfx/Fonts/efont/lgfx_efont_cn.c /tmp/fields/embodiments/firmware/StickS3_Call/third_party/M5GFX/src/lgfx/Fonts/efont/lgfx_efont_cn.c
+COPY embodiments/firmware/StickS3_Call/third_party/M5GFX/src/lgfx/Fonts/efont/lgfx_efont_cn.h /tmp/fields/embodiments/firmware/StickS3_Call/third_party/M5GFX/src/lgfx/Fonts/efont/lgfx_efont_cn.h
+RUN cmake -S /tmp/fields/embodiments/simulator/native -B /tmp/sticks3-pc-runner-build -DCMAKE_BUILD_TYPE=Release \
+ && cmake --build /tmp/sticks3-pc-runner-build --parallel \
+ && ctest --test-dir /tmp/sticks3-pc-runner-build --output-on-failure \
+ && install -m 0755 /tmp/sticks3-pc-runner-build/sticks3-pc-runner /usr/local/bin/sticks3-pc-runner \
+ && rm -rf /tmp/fields /tmp/sticks3-pc-runner-build
+USER node
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["pnpm", "dev"]

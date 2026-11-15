@@ -1,0 +1,78 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  prometheus/collector:
+    config:
+      scrape_configs:
+        - job_name: fields-opentelemetry-gateway
+          scrape_interval: 15s
+          static_configs:
+            - targets: [127.0.0.1:8888]
+
+extensions:
+  bearertokenauth/shared:
+    filename: /run/secrets/fields-observability-export-token
+  health_check:
+    endpoint: 0.0.0.0:13133
+    path: /ready
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 512
+    spike_limit_mib: 128
+  batch:
+    send_batch_size: 256
+    timeout: 1s
+  tail_sampling:
+    decision_wait: 35s
+    num_traces: 2000
+    expected_new_traces_per_sec: 50
+    maximum_trace_size_bytes: 1048576
+    decision_cache:
+      sampled_cache_size: 8000
+    policies:
+      - name: errors
+        type: status_code
+        status_code:
+          status_codes: [ERROR]
+      - name: slow_browser_or_backend_api
+        type: ottl_condition
+        ottl_condition:
+          error_mode: ignore
+          span:
+            - '(attributes["fields.operation_category"] == "browser_api" or attributes["fields.operation_category"] == "backend_api") and (end_time - start_time) >= Duration("3s")'
+      - name: slow_backend_runtime_call
+        type: ottl_condition
+        ottl_condition:
+          error_mode: ignore
+          span:
+            - 'attributes["fields.operation_category"] == "runtime_call" and (end_time - start_time) >= Duration("10s")'
+
+exporters:
+  otlp_http/shared:
+    endpoint: ${env:FIELDS_OBSERVABILITY_EXPORT_ENDPOINT}
+    auth:
+      authenticator: bearertokenauth/shared
+    tls:
+      insecure: false
+
+service:
+  extensions: [bearertokenauth/shared, health_check]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, tail_sampling, batch]
+      exporters: [otlp_http/shared]
+    metrics:
+      receivers: [otlp, prometheus/collector]
+      processors: [memory_limiter, batch]
+      exporters: [otlp_http/shared]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [otlp_http/shared]

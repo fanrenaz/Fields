@@ -1,0 +1,17 @@
+**/node_modules
+.pnpm-store/
+**/dist
+**/dist-web
+**/tests
+**/*.test.ts
+**/*.test.mjs
+**/*.test.cjs
+**/.git
+**/.env
+**/.env.*
+.dev-data/
+frontend/.next
+frontend/build
+frontend/coverage
+frontend/out
+**/*.tsbuildinfo

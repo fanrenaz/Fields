@@ -1,0 +1,29 @@
+:80 {
+	encode gzip zstd
+
+	handle /health {
+		rewrite * /health
+		reverse_proxy backend:4102
+	}
+
+	handle /api/* {
+		reverse_proxy backend:4102 {
+			header_up Origin http://127.0.0.1:3102
+		}
+	}
+
+	handle /embodiment/ws {
+		reverse_proxy embodiment:4105
+	}
+
+	@simulatorRoot path /simulator
+	redir @simulatorRoot /simulator/ 308
+
+	handle_path /simulator/* {
+		reverse_proxy simulator:8790
+	}
+
+	handle {
+		reverse_proxy frontend:3103
+	}
+}

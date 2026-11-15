@@ -1,0 +1,131 @@
+{$FIELDS_SITE_ADDRESS::80} {
+	encode gzip zstd
+
+	header {
+		Cross-Origin-Opener-Policy "same-origin"
+		Cross-Origin-Resource-Policy "same-origin"
+		Referrer-Policy "no-referrer"
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		-Server
+	}
+
+	@pwa path /app /app/*
+	header @pwa {
+		Content-Security-Policy "default-src 'self'; base-uri 'none'; connect-src 'self' {$FIELDS_PWA_STORAGE_ORIGINS:}; font-src 'self'; form-action 'self'; frame-ancestors 'none'; img-src 'self' blob: data: {$FIELDS_PWA_STORAGE_ORIGINS:}; manifest-src 'self'; object-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; worker-src 'self' blob:; upgrade-insecure-requests"
+		Permissions-Policy "camera=(self), display-capture=(), geolocation=(), microphone=(), payment=(), usb=()"
+	}
+
+	@download not path /app /app/*
+	header @download {
+		Content-Security-Policy "default-src 'none'; base-uri 'none'; connect-src 'self'; font-src 'self'; form-action 'none'; frame-ancestors 'none'; img-src 'self'; object-src 'none'; script-src 'self'; style-src 'self'; upgrade-insecure-requests"
+		Permissions-Policy "camera=(), display-capture=(), geolocation=(), microphone=(), payment=(), usb=()"
+	}
+
+	handle /health {
+		respond "OK" 200
+	}
+
+	handle /ready {
+		respond "READY" 200
+	}
+
+	handle /api/* {
+		reverse_proxy backend:4102
+	}
+
+	handle /embodiment/ws {
+		reverse_proxy embodiment:4105
+	}
+
+	@desktop_versioned_installer {
+		path_regexp ^/desktop/releases/[0-9]+\.[0-9]+\.[0-9]+/Fields-[0-9]+\.[0-9]+\.[0-9]+-Setup\.exe$
+		method GET HEAD
+	}
+	handle @desktop_versioned_installer {
+		redir {$FIELDS_DESKTOP_BLOB_ORIGIN}{http.request.uri.path} 302
+	}
+
+	@desktop_stable_installer {
+		path /desktop/download/FieldsSetup.exe
+		method GET HEAD
+	}
+	handle @desktop_stable_installer {
+		redir {$FIELDS_DESKTOP_BLOB_ORIGIN}{http.request.uri.path} 302
+	}
+
+	@desktop_latest_manifest {
+		path /desktop/releases/latest.json
+		method GET HEAD
+	}
+	handle @desktop_latest_manifest {
+		reverse_proxy {$FIELDS_DESKTOP_BLOB_ORIGIN} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	@desktop_runtime_channel {
+		path /desktop/runtime/channels/stable.json /desktop/runtime/channels/stable.json.sig
+		method GET HEAD
+	}
+	handle @desktop_runtime_channel {
+		header Cache-Control "no-store"
+		reverse_proxy {$FIELDS_DESKTOP_BLOB_ORIGIN} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	@desktop_runtime_manifest {
+		path_regexp ^/desktop/runtime/releases/[0-9a-f]{40}/manifest\.json(\.sig)?$
+		method GET HEAD
+	}
+	handle @desktop_runtime_manifest {
+		header Cache-Control "public, max-age=31536000, immutable"
+		reverse_proxy {$FIELDS_DESKTOP_BLOB_ORIGIN} {
+			header_up Host {upstream_hostport}
+		}
+	}
+
+	@desktop_runtime_object {
+		path_regexp ^/desktop/runtime/objects/sha256/[0-9a-f]{64}$
+		method GET HEAD
+	}
+	handle @desktop_runtime_object {
+		header Cache-Control "public, max-age=31536000, immutable"
+		redir {$FIELDS_DESKTOP_BLOB_ORIGIN}{http.request.uri.path} 302
+	}
+
+	@desktop_unknown {
+		path /desktop/*
+		method GET HEAD
+	}
+	handle @desktop_unknown {
+		respond "Not Found" 404
+	}
+
+	handle /desktop/* {
+		respond "Method Not Allowed" 405
+	}
+
+	handle /app {
+		redir /app/ 308
+	}
+
+	handle_path /app/* {
+		root * /srv/app
+		try_files {path} /index.html
+		file_server
+	}
+
+	@site_files path / /app.js /styles.css /fields-mark.svg
+	handle @site_files {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+
+	handle {
+		respond "Not Found" 404
+	}
+}

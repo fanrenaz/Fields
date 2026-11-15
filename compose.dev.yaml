@@ -1,0 +1,366 @@
+# Canonical local development environment. Services run directly in the host
+# Docker daemon; production images and production secrets are never consumed.
+name: fields-dev
+
+x-workspace-service: &workspace-service
+  image: fields-workspace-dev:latest
+  pull_policy: never
+  restart: unless-stopped
+  user: node
+  volumes: &workspace-volumes
+    - type: bind
+      source: .
+      target: /workspace
+      bind:
+        create_host_path: false
+    - workspace-node-modules:/workspace/node_modules
+    - contracts-node-modules:/workspace/contracts/node_modules
+    - backend-node-modules:/workspace/backend/node_modules
+    - frontend-node-modules:/workspace/frontend/node_modules
+    - simulator-node-modules:/workspace/embodiments/simulator/node_modules
+    - company-runtime-node-modules:/workspace/company-runtime/node_modules
+    - eslint-config-node-modules:/workspace/tools/eslint-config/node_modules
+    - workspace-pnpm-store:/home/node/.local/share/pnpm/store
+
+x-runtime-environment: &runtime-environment
+  FIELDS_DEV_OTEL_ENABLED: ${FIELDS_DEV_OTEL_ENABLED:-false}
+  FIELDS_COMPANY_RUNTIME_URL: http://backend:4110
+  FIELDS_COMPANY_RUNTIME_VOLUME_NAME: ${FIELDS_COMPANY_RUNTIME_VOLUME_NAME:-fields-dev-company-runtime-data}
+  FIELDS_OBJECT_STORAGE_INTERNAL_ENDPOINT: http://rustfs:9000
+  FIELDS_OBJECT_STORAGE_PUBLIC_ENDPOINT: http://127.0.0.1:39000
+  FIELDS_OBJECT_STORAGE_REGION: us-east-1
+  FIELDS_COMPANY_FILES_BUCKET: fields-company-files
+  FIELDS_COMPANY_FILES_ACCESS_KEY_ID: fields-dev-files
+  FIELDS_COMPANY_FILES_SECRET_ACCESS_KEY: fields-dev-files-secret
+  FIELDS_FILE_SHARE_SECRET: fields-development-company-file-share-secret
+  FIELDS_COMPANY_ASSETS_BUCKET: fields-company-assets
+  FIELDS_COMPANY_ASSETS_ACCESS_KEY_ID: fields-dev-assets
+  FIELDS_COMPANY_ASSETS_SECRET_ACCESS_KEY: fields-dev-assets-secret
+
+x-runtime-secrets: &runtime-secrets
+  - postgres-password
+  - better-auth-secret
+  - source: control-token
+    target: fields-control-token
+
+services:
+  rustfs:
+    image: rustfs/rustfs@sha256:41fe89380f4120a337790c02af192c3fe7bb55c3edc2e6e9357b487b47c6ab21
+    restart: unless-stopped
+    environment:
+      RUSTFS_CONSOLE_ENABLE: "false"
+      RUSTFS_CORS_ALLOWED_ORIGINS: "*"
+      RUSTFS_ACCESS_KEY: fields-dev-root
+      RUSTFS_SECRET_KEY: fields-dev-root-secret
+    command: ["--access-key", "fields-dev-root", "--secret-key", "fields-dev-root-secret", "/data"]
+    volumes:
+      - rustfs-data:/data
+    ports:
+      - "127.0.0.1:39000:9000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9000/minio/health/live >/dev/null 2>&1 || wget -qO- http://127.0.0.1:9000/health >/dev/null 2>&1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks:
+      - control
+      - runtime
+
+  rustfs-init:
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    restart: "no"
+    entrypoint: ["/bin/sh", "/init.sh"]
+    environment:
+      FIELDS_RUSTFS_ROOT_ACCESS_KEY: fields-dev-root
+      FIELDS_RUSTFS_ROOT_SECRET_KEY: fields-dev-root-secret
+      FIELDS_COMPANY_FILES_ACCESS_KEY_ID: fields-dev-files
+      FIELDS_COMPANY_FILES_SECRET_ACCESS_KEY: fields-dev-files-secret
+      FIELDS_COMPANY_ASSETS_ACCESS_KEY_ID: fields-dev-assets
+      FIELDS_COMPANY_ASSETS_SECRET_ACCESS_KEY: fields-dev-assets-secret
+    volumes:
+      - type: bind
+        source: ./infra/rustfs/init.sh
+        target: /init.sh
+        read_only: true
+      - type: bind
+        source: ./infra/rustfs
+        target: /policies
+        read_only: true
+    depends_on:
+      rustfs:
+        condition: service_healthy
+    networks:
+      - control
+      - runtime
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: fields
+      POSTGRES_USER: fields
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-password
+    secrets:
+      - postgres-password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fields -d fields"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - control
+
+  prepare:
+    image: fields-workspace-dev:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: workspace
+    pull_policy: build
+    restart: "no"
+    user: node
+    command: ["node", "scripts/dev-workspace.mjs", "prepare"]
+    env_file:
+      - path: ./.env.dev
+        required: true
+    environment:
+      <<: *runtime-environment
+      FIELDS_DEV_RESET_RUNTIME_STATE: ${FIELDS_DEV_RESET_RUNTIME_STATE:-true}
+      FIELDS_DEV_RESOURCE_SCOPE: fields-dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rustfs-init:
+        condition: service_completed_successfully
+    volumes: *workspace-volumes
+    secrets: *runtime-secrets
+    networks:
+      - control
+
+  runtime-prepare:
+    <<: *workspace-service
+    user: root
+    command: ["chown", "-R", "node:node", "/workdir"]
+    restart: "no"
+    volumes:
+      - company-runtime-data:/workdir
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+
+  contracts:
+    <<: *workspace-service
+    command: ["node", "scripts/dev-workspace.mjs", "contracts"]
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+    networks:
+      - control
+
+  backend:
+    <<: *workspace-service
+    command: ["node", "scripts/dev-workspace.mjs", "backend"]
+    stop_grace_period: 30s
+    env_file:
+      - path: ./.env.dev
+        required: true
+    environment:
+      <<: *runtime-environment
+      FIELDS_COMPANY_RUNTIME_CALLBACK_BASE_URL: http://127.0.0.1:4102/api/v1
+    secrets: *runtime-secrets
+    volumes:
+      - type: bind
+        source: .
+        target: /workspace
+        bind:
+          create_host_path: false
+      - workspace-node-modules:/workspace/node_modules
+      - contracts-node-modules:/workspace/contracts/node_modules
+      - backend-node-modules:/workspace/backend/node_modules
+      - frontend-node-modules:/workspace/frontend/node_modules
+      - simulator-node-modules:/workspace/embodiments/simulator/node_modules
+      - company-runtime-node-modules:/workspace/company-runtime/node_modules
+      - eslint-config-node-modules:/workspace/tools/eslint-config/node_modules
+      - workspace-pnpm-store:/home/node/.local/share/pnpm/store
+      - company-runtime-data:/workdir
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
+      runtime-prepare:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "Promise.all([4102,4110].map(port=>fetch('http://127.0.0.1:'+port+'/health').then(r=>{if(!r.ok)throw new Error(String(port))}))).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    networks:
+      control:
+        aliases: [backend, workspace]
+      runtime:
+        aliases: [backend, workspace]
+
+  event:
+    <<: *workspace-service
+    command: ["node", "scripts/dev-workspace.mjs", "event"]
+    env_file:
+      - path: ./.env.dev
+        required: true
+    environment: *runtime-environment
+    secrets: *runtime-secrets
+    depends_on:
+      postgres:
+        condition: service_healthy
+      prepare:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4104/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    networks:
+      - control
+
+  frontend:
+    <<: *workspace-service
+    command: ["node", "scripts/dev-workspace.mjs", "frontend"]
+    depends_on:
+      prepare:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3103/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    networks:
+      - control
+
+  embodiment:
+    <<: *workspace-service
+    profiles: [voice, simulator, full]
+    command: ["node", "scripts/dev-workspace.mjs", "embodiment"]
+    env_file:
+      - path: ./.env.dev
+        required: true
+    environment: *runtime-environment
+    secrets: *runtime-secrets
+    depends_on:
+      backend:
+        condition: service_healthy
+      prepare:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:4105/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    networks:
+      - control
+
+  simulator:
+    <<: *workspace-service
+    profiles: [simulator, full]
+    command: ["node", "scripts/dev-workspace.mjs", "simulator"]
+    env_file:
+      - path: ./.env.dev
+        required: true
+    environment: *runtime-environment
+    depends_on:
+      embodiment:
+        condition: service_healthy
+      prepare:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8790/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 30s
+    networks:
+      - control
+
+  otel-gateway:
+    image: otel/opentelemetry-collector-contrib:0.151.0@sha256:d57bfe8eee2378f31cb1193239fbcac521d54a5a071fca2bfc106916a32b892d
+    profiles: [observability, full]
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol-contrib/gateway.yaml"]
+    volumes:
+      - type: bind
+        source: ./observability/gateway.yaml
+        target: /etc/otelcol-contrib/gateway.yaml
+        read_only: true
+        bind:
+          create_host_path: false
+    networks:
+      control:
+        aliases: [otel-gateway]
+      runtime:
+        aliases: [otel-gateway]
+      observability-ingest:
+
+  gateway:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+    ports:
+      - "127.0.0.1:3102:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./compose.dev.Caddyfile
+        target: /etc/caddy/Caddyfile
+        read_only: true
+        bind:
+          create_host_path: false
+      - gateway-caddy-data:/data
+      - gateway-caddy-config:/config
+    networks:
+      - control
+
+secrets:
+  postgres-password:
+    file: ./.dev-data/secrets/postgres-password
+  better-auth-secret:
+    file: ./.dev-data/secrets/better-auth-secret
+  control-token:
+    file: ./.dev-data/secrets/control-token
+
+volumes:
+  postgres-data:
+  rustfs-data:
+  gateway-caddy-data:
+  gateway-caddy-config:
+  workspace-node-modules:
+  contracts-node-modules:
+  backend-node-modules:
+  frontend-node-modules:
+  simulator-node-modules:
+  company-runtime-node-modules:
+  eslint-config-node-modules:
+  workspace-pnpm-store:
+  company-runtime-data:
+    name: ${FIELDS_COMPANY_RUNTIME_VOLUME_NAME:-fields-dev-company-runtime-data}
+
+networks:
+  control:
+    name: fields-dev-control
+  runtime:
+    name: fields-dev-runtime
+  observability-ingest:
+    external: true
+    name: ${FIELDS_OBSERVABILITY_NETWORK:-fields-dev-observability-ingest}

@@ -1,0 +1,5 @@
+{
+  "name": "@fields/eslint-boundary-fixture",
+  "private": true,
+  "type": "module"
+}

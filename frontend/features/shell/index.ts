@@ -1,0 +1,31 @@
+export {
+  AppShell,
+  FocusStage,
+  GlobalLoadingOverlay,
+  GlobalRail,
+  LeftSidePanel,
+  MainWorkspace,
+  OverlayLayer,
+  RightSidePanel,
+  SidePanelTabs,
+  StagePageShell,
+  StagePlaceholder,
+  WorkspaceCanvasTabs,
+  WorkspaceHeader,
+} from "./Shell";
+export { LobeAgentWorkspace, LobeGroupWorkspace } from "./LobeWorkspaces";
+export type {
+  FullPage,
+  GlobalRailRoomItem,
+  MainWorkspaceCanvasContent,
+  MainWorkspaceCanvasSlot,
+  MainWorkspaceCanvasTabItem,
+  MainWorkspaceCanvasTabsSlot,
+  MainWorkspaceHeaderSlot,
+  MainWorkspaceOverlaySlot,
+  MainWorkspacePanelSlot,
+  MainWorkspaceProps,
+  MainWorkspaceSidePanelTabItem,
+  MainWorkspaceSidePanelTabsSlot,
+  OverlayKind,
+} from "./Shell";

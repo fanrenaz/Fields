@@ -1,0 +1,41 @@
+{
+  "mcpServers": {
+    "fields_embodiment": {
+      "type": "http",
+      "url": "{{FIELDS_COMPANY_RUNTIME_URL}}/mcp/embodiment",
+      "env_http_headers": {
+        "X-Fields-Member-Id": "FIELDS_MCP_MEMBER_ID"
+      }
+    },
+    "fields_search": {
+      "type": "http",
+      "url": "{{FIELDS_COMPANY_RUNTIME_URL}}/mcp/search",
+      "env_http_headers": {
+        "X-Fields-Member-Id": "FIELDS_MCP_MEMBER_ID"
+      }
+    },
+    "fields_room_messages": {
+      "type": "http",
+      "url": "{{FIELDS_COMPANY_RUNTIME_URL}}/mcp/room-messages",
+      "env_http_headers": {
+        "X-Fields-Member-Id": "FIELDS_MCP_MEMBER_ID"
+      },
+      "enabled": false
+    },
+    "fields_assets": {
+      "type": "http",
+      "url": "{{FIELDS_COMPANY_RUNTIME_URL}}/mcp/assets",
+      "env_http_headers": {
+        "X-Fields-Member-Id": "FIELDS_MCP_MEMBER_ID"
+      }
+    },
+    "fields_mail": {
+      "type": "http",
+      "url": "{{FIELDS_COMPANY_RUNTIME_URL}}/mcp/mail",
+      "bearer_token_env_var": "FIELDS_MAIL_MCP_TOKEN",
+      "env_http_headers": {
+        "X-Fields-Member-Id": "FIELDS_MCP_MEMBER_ID"
+      }
+    }
+  }
+}

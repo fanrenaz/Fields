@@ -1,0 +1,230 @@
+.fields-mobile-app,
+.fields-mobile-auth {
+  height: 100dvh;
+  background: var(--ant-color-bg-container);
+  color: var(--ant-color-text);
+}
+
+.fields-mobile-app {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.fields-mobile-app.is-conversation { grid-template-rows: minmax(0, 1fr); }
+
+.fields-mobile-route,
+.fields-mobile-screen,
+.fields-mobile-conversation {
+  min-width: 0;
+  min-height: 0;
+}
+
+.fields-mobile-screen,
+.fields-mobile-conversation {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  background: var(--ant-color-bg-container);
+}
+
+.fields-mobile-tabs {
+  display: grid;
+  padding: 6px max(8px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+  border-top: 1px solid var(--ant-color-border-secondary);
+  background: color-mix(in srgb, var(--ant-color-bg-container) 92%, transparent);
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.fields-mobile-notification-prompt {
+  position: fixed;
+  right: 12px;
+  bottom: calc(68px + env(safe-area-inset-bottom));
+  left: 12px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--ant-color-border-secondary);
+  border-radius: 12px;
+  background: var(--ant-color-bg-elevated);
+  box-shadow: var(--ant-box-shadow-secondary);
+  gap: 8px;
+}
+.fields-mobile-notification-prompt span { flex: 1; font-size: 13px; }
+.fields-mobile-executor-options { overflow-x: auto; justify-content: flex-start !important; }
+
+.fields-mobile-tabs a {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  color: var(--ant-color-text-secondary);
+  flex-direction: column;
+  font-size: 11px;
+  gap: 3px;
+  text-decoration: none;
+}
+
+.fields-mobile-tabs a.is-active {
+  background: var(--ant-color-fill-secondary);
+  color: var(--ant-color-primary);
+  font-weight: 700;
+}
+
+.fields-mobile-filter-strip {
+  display: flex;
+  overflow-x: auto;
+  padding: 4px 12px 8px;
+  gap: 4px;
+  scrollbar-width: none;
+}
+
+.fields-mobile-filter-strip .is-active {
+  background: var(--ant-color-fill-secondary);
+  color: var(--ant-color-text);
+}
+
+.fields-mobile-search {
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  margin: 0 12px 6px;
+  padding: 0 8px;
+  border: 1px solid var(--ant-color-border-secondary);
+  border-radius: 10px;
+  background: var(--ant-color-fill-quaternary);
+  color: var(--ant-color-text-tertiary);
+}
+
+.fields-mobile-search input { font-size: 16px; }
+
+.fields-mobile-list-wrap,
+.fields-mobile-list-skeleton {
+  overflow-y: auto;
+  flex: 1;
+  padding: 4px 12px 16px;
+}
+
+.fields-mobile-list-skeleton { padding-top: 20px; }
+
+.fields-mobile-row {
+  display: grid;
+  width: 100%;
+  min-height: 72px;
+  padding: 12px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--ant-color-border-secondary);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  text-align: left;
+}
+
+.fields-mobile-row-copy,
+.fields-mobile-row-meta {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.fields-mobile-row-copy { gap: 5px; }
+.fields-mobile-row-copy strong,
+.fields-mobile-row-copy span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fields-mobile-row-copy strong { font-size: 15px; }
+.fields-mobile-row-copy span,
+.fields-mobile-row-meta { color: var(--ant-color-text-secondary); font-size: 12px; }
+.fields-mobile-row-meta { align-items: flex-end; gap: 8px; }
+.fields-mobile-row-meta b { min-width: 18px; padding: 2px 5px; border-radius: 99px; background: var(--ant-color-primary); color: var(--ant-color-white); font-size: 11px; text-align: center; }
+
+.fields-mobile-state {
+  display: flex;
+  flex: 1;
+  min-height: 220px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+
+.fields-mobile-inline-error,
+.fields-mobile-composer-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--ant-color-error-bg);
+  color: var(--ant-color-error);
+  font-size: 12px;
+}
+
+.fields-mobile-home-unavailable { margin: 8px 12px; padding: 10px 12px; border-radius: 9px; background: var(--ant-color-warning-bg); color: var(--ant-color-warning-text); font-size: 13px; }
+
+.fields-mobile-timeline { overflow: hidden; flex: 1; }
+.fields-mobile-conversation-empty { display: grid; height: 100%; place-items: center; padding: 24px; color: var(--ant-color-text-secondary); text-align: center; }
+.fields-mobile-composer { flex: none; border-top: 1px solid var(--ant-color-border-secondary); }
+.fields-mobile-reply { padding: 7px 12px; background: var(--ant-color-fill-quaternary); color: var(--ant-color-text-secondary); font-size: 12px; }
+
+.fields-mobile-image-tray {
+  display: flex;
+  overflow-x: auto;
+  padding: 8px 12px 2px;
+  gap: 8px;
+}
+
+.fields-mobile-image {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  flex: 0 0 68px;
+  border: 1px solid var(--ant-color-border-secondary);
+  border-radius: 10px;
+  background: var(--ant-color-fill-quaternary);
+}
+
+.fields-mobile-image img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+.fields-mobile-image.is-failed img { opacity: 0.42; }
+.fields-mobile-image > button:not(.fields-mobile-image-remove) { position: absolute; inset: 0; display: grid; border: 0; background: transparent; color: var(--ant-color-error); place-items: center; }
+.fields-mobile-image-remove { position: absolute !important; top: -7px; right: -7px; background: var(--ant-color-bg-container) !important; box-shadow: var(--ant-box-shadow-tertiary); }
+.fields-mobile-image small { position: absolute; overflow: hidden; width: 1px; height: 1px; clip: rect(0 0 0 0); }
+.fields-mobile-image-progress { position: absolute; right: 6px; bottom: 6px; left: 6px; height: 3px; overflow: hidden; border-radius: 99px; background: color-mix(in srgb, var(--ant-color-bg-container) 60%, transparent); }
+.fields-mobile-image-progress::after { display: block; width: 45%; height: 100%; border-radius: inherit; animation: fields-mobile-upload 1s ease-in-out infinite alternate; background: var(--ant-color-primary); content: ""; }
+
+.fields-mobile-auth {
+  display: grid;
+  min-height: 100dvh;
+  padding: max(24px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom));
+  place-items: center;
+}
+
+.fields-mobile-auth-form { display: flex; width: min(100%, 360px); flex-direction: column; gap: 16px; }
+.fields-mobile-auth-form h1 { margin: 8px 0; font-size: 28px; }
+.fields-mobile-auth-form label { display: flex; flex-direction: column; font-size: 13px; font-weight: 700; gap: 7px; }
+.fields-mobile-auth-form p { margin: 0; color: var(--ant-color-error); font-size: 13px; }
+.fields-mobile-auth-mark { width: 72px; height: 60px; object-fit: contain; }
+.fields-mobile-spin { animation: fields-mobile-spin 0.8s linear infinite; }
+
+.fields-mobile-me { overflow-y: auto; }
+.fields-mobile-profile { padding: 30px 20px 24px; text-align: center; }
+.fields-mobile-profile h1 { margin: 12px 0 2px; font-size: 22px; }
+.fields-mobile-profile p { margin: 0; color: var(--ant-color-text-secondary); }
+.fields-mobile-settings-list { margin: 0 14px 20px; border-block: 1px solid var(--ant-color-border-secondary); }
+.fields-mobile-settings-list > div { display: flex; min-height: 58px; align-items: center; padding: 10px 4px; border-bottom: 1px solid var(--ant-color-border-secondary); gap: 12px; }
+.fields-mobile-settings-list > div:last-child { border: 0; }
+.fields-mobile-settings-list span { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 2px; }
+.fields-mobile-settings-list small { overflow: hidden; color: var(--ant-color-text-secondary); text-overflow: ellipsis; white-space: nowrap; }
+.fields-mobile-language { justify-content: flex-end; }
+
+@keyframes fields-mobile-spin { to { transform: rotate(360deg); } }
+@keyframes fields-mobile-upload { to { transform: translateX(122%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fields-mobile-spin { animation-duration: 1.6s; }
+  .fields-mobile-image-progress::after { animation: none; width: 70%; }
+}

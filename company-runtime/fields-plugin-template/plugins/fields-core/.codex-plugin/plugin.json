@@ -1,0 +1,22 @@
+{
+  "name": "fields-core",
+  "version": "1.0.11",
+  "description": "Required Fields runtime capabilities for Codex.",
+  "author": {
+    "name": "Fields"
+  },
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Fields Core",
+    "shortDescription": "Required Fields runtime capabilities.",
+    "longDescription": "System-managed Fields capabilities for embodiment, search, Company Files, Room messages, company assets, and mail.",
+    "developerName": "Fields",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Tools"
+    ],
+    "defaultPrompt": [
+      "Use the available Fields tools for this task."
+    ]
+  }
+}

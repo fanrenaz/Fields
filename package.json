@@ -1,0 +1,25 @@
+{
+  "name": "@fields/workspace",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@11.15.1",
+  "scripts": {
+    "renderer:smoke": "pnpm --filter @fields/frontend run renderer:smoke",
+    "dev": "node scripts/dev-workspace.mjs",
+    "dev:supervisor:test": "node --test scripts/dev-workspace.test.mjs",
+    "lint": "pnpm --filter @fields/contracts run build && pnpm -r --if-present run lint",
+    "lint:fix": "pnpm --filter @fields/contracts run build && pnpm -r --if-present run lint:fix",
+    "test": "pnpm --filter @fields/contracts run build && pnpm -r --if-present run test",
+    "typecheck": "pnpm --filter @fields/contracts run build && pnpm -r --if-present run typecheck",
+    "build": "pnpm --filter @fields/contracts run build && pnpm -r --if-present run build"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "5.10.0",
+    "eslint": "9.39.5",
+    "eslint-plugin-boundaries": "7.0.2",
+    "typescript-eslint": "8.64.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

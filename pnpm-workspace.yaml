@@ -1,0 +1,23 @@
+packages:
+  - contracts
+  - backend
+  - frontend
+  - company-runtime
+  - tools/eslint-config
+  - embodiments/simulator
+
+injectWorkspacePackages: true
+blockExoticSubdeps: false
+allowBuilds:
+  '@lobehub/editor': true
+  better-sqlite3: true
+  cpu-features: true
+  electron-winstaller: true
+  esbuild: true
+  node: true
+  protobufjs: true
+  ssh2: true
+minimumReleaseAgeExclude:
+  - '@lobehub/icons@5.15.0'
+  - '@lobehub/ui@5.23.4'
+  - '@lobehub/editor@4.23.0'

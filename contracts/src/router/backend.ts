@@ -1,0 +1,625 @@
+import {
+  desktopBrowserSetInputSchema,
+  desktopBrowserStatusSchema,
+  desktopBrowserTunnelStartInputSchema,
+  desktopBrowserTunnelStartResultSchema,
+} from "../public/desktop-browser.js";
+import { desktopNotificationEventsInputSchema, desktopNotificationEventStreamSchema } from "../public/desktop-notification.js";
+import {
+  notificationInboxListInputSchema, notificationInboxListResultSchema,
+  notificationMarkReadInputSchema, notificationMarkReadResultSchema,
+  pushSubscriptionDeleteInputSchema, pushSubscriptionDeleteResultSchema,
+  pushSubscriptionListResultSchema, pushSubscriptionSchema,
+  pushSubscriptionUpsertInputSchema, webPushPublicKeyResultSchema,
+} from "../public/notification.js";
+import {
+  companyActorCreateInputSchema,
+  companyActorCreateResultSchema,
+  companyActorGetInputSchema,
+  companyActorRemoveInputSchema,
+  companyActorRemoveResultSchema,
+  companyActorSchema,
+  companyActorsListInputSchema,
+  companyActorsListResultSchema,
+  companyRegistrationSetEnabledInputSchema,
+  companyRegistrationSettingsSchema,
+  companyOnboardingRetryResultSchema,
+  companyOnboardingStatusSchema,
+  companyInvitationsListInputSchema,
+  companyInvitationsListResultSchema,
+  companyRuntimeStatusInputSchema,
+  companyRuntimeStatusResultSchema,
+  sessionMeSchema,
+  registrationClaimResultSchema,
+  registrationPrepareInputSchema,
+  registrationPrepareResultSchema,
+} from "../public/company.js";
+import {
+  companyFileDeleteResultSchema,
+  companyFileDownloadInputSchema,
+  companyFileDownloadResultSchema,
+  companyFileFolderCreateInputSchema,
+  companyFileFolderDeleteResultSchema,
+  companyFileFolderMutationInputSchema,
+  companyFileFolderSchema,
+  companyFileListInputSchema,
+  companyFileListResultSchema,
+  companyFileMutationInputSchema,
+  companyFileSchema,
+  companyFileShareCreateInputSchema,
+  companyFileShareListInputSchema,
+  companyFileShareListResultSchema,
+  companyFileShareResolveInputSchema,
+  companyFileShareResolveResultSchema,
+  companyFileShareRevokeInputSchema,
+  companyFileShareRevokeResultSchema,
+  companyFileShareSchema,
+  companyFileUploadBeginInputSchema,
+  companyFileUploadFinalizeInputSchema,
+  companyFileUploadReservationSchema,
+} from "../public/company-file.js";
+import {
+  homeFilesystemCreateInputSchema,
+  homeFilesystemDeleteInputSchema,
+  homeFilesystemDeleteResultSchema,
+  homeFilesystemEntrySchema,
+  homeFilesystemEventStreamSchema,
+  homeFilesystemEventsInputSchema,
+  homeFilesystemListInputSchema,
+  homeFilesystemListResultSchema,
+  homeFilesystemRenameInputSchema,
+  homeModelOptionsInputSchema,
+  homeModelOptionsResultSchema,
+  homeMemoryInputSchema,
+  homeMemoryProfileSchema,
+  homeMemoryUpdateInputSchema,
+  homeProjectCreateInputSchema,
+  homeProjectDeleteInputSchema,
+  homeProjectDeleteResultSchema,
+  homeProjectListInputSchema,
+  homeProjectListResultSchema,
+  homeProjectSchema,
+  homeProjectThreadMoveInputSchema,
+  homeProjectThreadMoveResultSchema,
+  homeProjectUpdateInputSchema,
+  homeThreadListInputSchema,
+  homeThreadListResultSchema,
+  homeThreadDeleteInputSchema,
+  homeThreadDeleteResultSchema,
+  homeThreadForkInputSchema,
+  homeThreadForkResultSchema,
+  homeThreadReadInputSchema,
+  homeThreadReadResultSchema,
+  homeThreadSelectInputSchema,
+  homeThreadSelectResultSchema,
+  homeThreadSearchInputSchema,
+  homeThreadSearchResultSchema,
+  homeThreadSettingsInputSchema,
+  homeThreadSettingsResultSchema,
+  homeThreadSettingsSetInputSchema,
+  homeConversationImportReadInputSchema,
+  homeConversationImportSchema,
+  homeTurnEventStreamSchema,
+  homeTurnEventsInputSchema,
+  homeTurnSubmitInputSchema,
+  homeTurnSubmitResultSchema,
+  homeQuestionInteractionRespondInputSchema,
+  homeQuestionInteractionRespondResultSchema,
+  homeQuestionInteractionSnoozeInputSchema,
+  homeQuestionInteractionSnoozeResultSchema,
+} from "../public/home.js";
+import {
+  scheduledTaskCreateInputSchema,
+  scheduledTaskDeleteResultSchema,
+  scheduledTaskGetInputSchema,
+  scheduledTaskListInputSchema,
+  scheduledTaskListResultSchema,
+  scheduledTaskRunsListInputSchema,
+  scheduledTaskRunsListResultSchema,
+  scheduledTaskSummarySchema,
+  scheduledTaskUpdateInputSchema,
+  scheduledTaskVersionMutationInputSchema,
+} from "../public/scheduled-task.js";
+import {
+  roomCreateInputSchema,
+  roomCreateResultSchema,
+  roomInteractionRespondInputSchema,
+  roomInteractionRespondResultSchema,
+  roomInteractionSnoozeInputSchema,
+  roomInteractionSnoozeResultSchema,
+  roomListInputSchema,
+  roomListResultSchema,
+  roomMembersAddInputSchema,
+  roomMembersAddResultSchema,
+  roomMembersListInputSchema,
+  roomMembersListResultSchema,
+  roomMembersRemoveInputSchema,
+  roomMembersRemoveResultSchema,
+  roomMessageEventStreamSchema,
+  roomMessageEditInputSchema,
+  roomMessageMutationResultSchema,
+  roomMessageSendInputSchema,
+  roomMessageSendResultSchema,
+  roomMessageSoftDeleteInputSchema,
+  roomAgentReplyRegenerateInputSchema,
+  roomAgentReplyRegenerateResultSchema,
+  roomAgentReplySelectionResultSchema,
+  roomAgentReplySelectionSetInputSchema,
+  roomMessagesEventsInputSchema,
+  roomMessagesListInputSchema,
+  roomMessagesListResultSchema,
+  roomThreadReadInputSchema,
+  roomThreadReadResultSchema,
+} from "../public/room.js";
+import {
+  roomSideChatReadInputSchema,
+  roomSideChatReadResultSchema,
+  roomSideChatTurnEventStreamSchema,
+  roomSideChatTurnEventsInputSchema,
+  roomSideChatTurnSubmitInputSchema,
+  roomSideChatTurnSubmitResultSchema,
+} from "../public/room-side-chat.js";
+import {
+  companyExecutorSafeListResultSchema,
+  companyExecutorSharingGovernanceInputSchema,
+  companyExecutorSharingGovernanceResultSchema,
+  companyMemberExecutorInputSchema,
+  companyMemberExecutorSetInputSchema,
+  companyProxyDisableInputSchema,
+  companyProxySetInputSchema,
+  companyProxyStatusSchema,
+  executorDeleteResultSchema,
+  executorDeviceAuthorizationCancelResultSchema,
+  executorDeviceAuthorizationStartResultSchema,
+  executorDeviceAuthorizationStatusInputSchema,
+  executorDeviceAuthorizationStatusResultSchema,
+  executorCustomApiConfigureInputSchema,
+  executorModelCatalogInputSchema,
+  executorModelCatalogResultSchema,
+  executorModelPolicyResultSchema,
+  executorModelPolicyUpdateInputSchema,
+  executorModelValidationInputSchema,
+  executorModelValidationResultSchema,
+  memberExecutorAssignmentSchema,
+  memberExecutorCurrentInputSchema,
+  memberExecutorOptionsResultSchema,
+  memberExecutorSetInputSchema,
+  personalExecutorCreateInputSchema,
+  personalExecutorMutationInputSchema,
+  personalExecutorMutationResultSchema,
+  personalExecutorRenameInputSchema,
+  personalExecutorsListResultSchema,
+  personalExecutorUsageResultSchema,
+} from "../public/executor.js";
+import {
+  agentRoomExecutionSummarySchema,
+  roomAgentActivityWatchInputSchema,
+  roomAgentExecutionGetInputSchema,
+  roomAgentTriggerPolicyInputSchema,
+  roomAgentTriggerPolicyResultSchema,
+  roomAgentTriggerPolicySetInputSchema,
+} from "../public/agent-room.js";
+import { roomAgentTurnEventStreamSchema } from "../public/agent-activity.js";
+import {
+  agentBuilderProfileInputSchema,
+  agentBuilderProfileSchema,
+  agentBuilderProfileUpdateInputSchema,
+  agentBuilderTopicCreateInputSchema,
+  agentBuilderTopicListInputSchema,
+  agentBuilderTopicListResultSchema,
+  agentBuilderTopicReadInputSchema,
+  agentBuilderTopicReadResultSchema,
+  agentBuilderTopicSchema,
+  agentBuilderTurnSubmitInputSchema,
+  agentBuilderTurnSubmitResultSchema,
+} from "../public/agent-builder.js";
+import {
+  assetBuilderTopicCreateInputSchema,
+  assetBuilderTopicListInputSchema,
+  assetBuilderTopicListResultSchema,
+  assetBuilderTopicReadInputSchema,
+  assetBuilderTopicReadResultSchema,
+  assetBuilderTopicSchema,
+  assetBuilderTurnSubmitInputSchema,
+  assetBuilderTurnSubmitResultSchema,
+} from "../public/asset-builder.js";
+import {
+  globalSearchInputSchema,
+  globalSearchResultSchema,
+  roomMessageContextInputSchema,
+} from "../public/search.js";
+import {
+  assetArchiveInputSchema,
+  assetContentReadInputSchema,
+  assetContentSchema,
+  assetDetailSchema,
+  assetDraftBeginZipInputSchema,
+  assetDraftCreateMcpInputSchema,
+  assetDraftDeleteResultSchema,
+  assetDraftImportGitInputSchema,
+  assetDraftMutationResultSchema,
+  assetDraftRevisionInputSchema,
+  assetDraftUpdateInputSchema,
+  assetListInputSchema,
+  assetListResultSchema,
+  assetMcpCredentialReplaceInputSchema,
+  assetMcpToolCallInputSchema,
+  assetMcpToolCallResultSchema,
+  assetMcpToolsListInputSchema,
+  assetMcpToolsListResultSchema,
+  assetMutationResultSchema,
+  assetPublishResultSchema,
+  assetReadInputSchema,
+  memberAssetApplyInputSchema,
+  memberAssetCurrentInputSchema,
+  memberAssetOperationInputSchema,
+  memberAssetOperationSchema,
+  memberAssetOptionsInputSchema,
+  memberAssetOptionsResultSchema,
+  memberAssetProfileSchema,
+} from "../public/asset.js";
+import {
+  mailboxSchema,
+  mailAttachmentReadInputSchema,
+  mailAttachmentReadResultSchema,
+  mailFolderListInputSchema,
+  mailFolderListResultSchema,
+  mailMailboxDisconnectResultSchema,
+  mailMailboxListResultSchema,
+  mailMailboxMutationResultSchema,
+  mailMailboxReadInputSchema,
+  mailMessageListInputSchema,
+  mailMessagePageSchema,
+  mailMessageReadInputSchema,
+  mailMessageSchema,
+  mailMessageSearchInputSchema,
+  mailMessageUpdateInputSchema,
+  mailMessageUpdateResultSchema,
+  mailPersonalConnectInputSchema,
+  mailSendInputSchema,
+  mailSendResultSchema,
+  mailSharedConnectInputSchema,
+  mailSharedGrantListInputSchema,
+  mailSharedGrantListResultSchema,
+  mailSharedGrantMutationResultSchema,
+  mailSharedGrantSetInputSchema,
+  mailSharedMailboxDeleteResultSchema,
+} from "../public/mail.js";
+import { publicProcedure, router } from "./core.js";
+
+const contractRouterUnavailable = <T>(): T => {
+  throw new Error("Backend contract router cannot execute; connect to the Backend runtime");
+};
+
+export const backendRouter = router({
+  notifications: router({
+    events: publicProcedure.input(desktopNotificationEventsInputSchema).output(desktopNotificationEventStreamSchema).subscription(contractRouterUnavailable),
+    inbox: router({
+      list: publicProcedure.input(notificationInboxListInputSchema).output(notificationInboxListResultSchema).query(contractRouterUnavailable),
+      markRead: publicProcedure.input(notificationMarkReadInputSchema).output(notificationMarkReadResultSchema).mutation(contractRouterUnavailable),
+    }),
+    push: router({
+      publicKey: publicProcedure.output(webPushPublicKeyResultSchema).query(contractRouterUnavailable),
+      subscriptions: router({
+        list: publicProcedure.output(pushSubscriptionListResultSchema).query(contractRouterUnavailable),
+        upsert: publicProcedure.input(pushSubscriptionUpsertInputSchema).output(pushSubscriptionSchema).mutation(contractRouterUnavailable),
+        delete: publicProcedure.input(pushSubscriptionDeleteInputSchema).output(pushSubscriptionDeleteResultSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+  }),
+  mail: router({
+    mailboxes: router({
+      list: publicProcedure.output(mailMailboxListResultSchema).query(contractRouterUnavailable),
+      read: publicProcedure.input(mailMailboxReadInputSchema).output(mailboxSchema).query(contractRouterUnavailable),
+      connectPersonal: publicProcedure.input(mailPersonalConnectInputSchema).output(mailMailboxMutationResultSchema).mutation(contractRouterUnavailable),
+      connectShared: publicProcedure.input(mailSharedConnectInputSchema).output(mailMailboxMutationResultSchema).mutation(contractRouterUnavailable),
+      disconnect: publicProcedure.input(mailMailboxReadInputSchema).output(mailMailboxDisconnectResultSchema).mutation(contractRouterUnavailable),
+      deleteShared: publicProcedure.input(mailMailboxReadInputSchema).output(mailSharedMailboxDeleteResultSchema).mutation(contractRouterUnavailable),
+    }),
+    folders: router({
+      list: publicProcedure.input(mailFolderListInputSchema).output(mailFolderListResultSchema).query(contractRouterUnavailable),
+    }),
+    messages: router({
+      list: publicProcedure.input(mailMessageListInputSchema).output(mailMessagePageSchema).query(contractRouterUnavailable),
+      search: publicProcedure.input(mailMessageSearchInputSchema).output(mailMessagePageSchema).query(contractRouterUnavailable),
+      read: publicProcedure.input(mailMessageReadInputSchema).output(mailMessageSchema).query(contractRouterUnavailable),
+      send: publicProcedure.input(mailSendInputSchema).output(mailSendResultSchema).mutation(contractRouterUnavailable),
+      update: publicProcedure.input(mailMessageUpdateInputSchema).output(mailMessageUpdateResultSchema).mutation(contractRouterUnavailable),
+    }),
+    attachments: router({
+      read: publicProcedure.input(mailAttachmentReadInputSchema).output(mailAttachmentReadResultSchema).query(contractRouterUnavailable),
+    }),
+    shared: router({
+      grants: router({
+        list: publicProcedure.input(mailSharedGrantListInputSchema).output(mailSharedGrantListResultSchema).query(contractRouterUnavailable),
+        grant: publicProcedure.input(mailSharedGrantSetInputSchema).output(mailSharedGrantMutationResultSchema).mutation(contractRouterUnavailable),
+        revoke: publicProcedure.input(mailSharedGrantSetInputSchema).output(mailSharedGrantMutationResultSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+  }),
+  assets: router({
+    list: publicProcedure.input(assetListInputSchema).output(assetListResultSchema).query(contractRouterUnavailable),
+    read: publicProcedure.input(assetReadInputSchema).output(assetDetailSchema).query(contractRouterUnavailable),
+    content: router({
+      read: publicProcedure.input(assetContentReadInputSchema).output(assetContentSchema).query(contractRouterUnavailable),
+    }),
+    draft: router({
+      beginZip: publicProcedure.input(assetDraftBeginZipInputSchema).output(assetDraftMutationResultSchema).mutation(contractRouterUnavailable),
+      importGit: publicProcedure.input(assetDraftImportGitInputSchema).output(assetDraftMutationResultSchema).mutation(contractRouterUnavailable),
+      createMcp: publicProcedure.input(assetDraftCreateMcpInputSchema).output(assetDraftMutationResultSchema).mutation(contractRouterUnavailable),
+      update: publicProcedure.input(assetDraftUpdateInputSchema).output(assetDraftMutationResultSchema).mutation(contractRouterUnavailable),
+      validate: publicProcedure.input(assetDraftRevisionInputSchema).output(assetDraftMutationResultSchema).mutation(contractRouterUnavailable),
+      delete: publicProcedure.input(assetDraftRevisionInputSchema).output(assetDraftDeleteResultSchema).mutation(contractRouterUnavailable),
+    }),
+    publish: publicProcedure.input(assetDraftRevisionInputSchema).output(assetPublishResultSchema).mutation(contractRouterUnavailable),
+    archive: publicProcedure.input(assetArchiveInputSchema).output(assetMutationResultSchema).mutation(contractRouterUnavailable),
+    restore: publicProcedure.input(assetArchiveInputSchema).output(assetMutationResultSchema).mutation(contractRouterUnavailable),
+    mcp: router({
+      credential: router({
+        replace: publicProcedure.input(assetMcpCredentialReplaceInputSchema).output(assetMutationResultSchema).mutation(contractRouterUnavailable),
+      }),
+      tools: router({
+        list: publicProcedure.input(assetMcpToolsListInputSchema).output(assetMcpToolsListResultSchema).query(contractRouterUnavailable),
+        invoke: publicProcedure.input(assetMcpToolCallInputSchema).output(assetMcpToolCallResultSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+  }),
+  search: router({
+    query: publicProcedure.input(globalSearchInputSchema).output(globalSearchResultSchema).query(contractRouterUnavailable),
+  }),
+  session: router({
+    me: publicProcedure.output(sessionMeSchema).query(contractRouterUnavailable),
+  }),
+  registration: router({
+    prepare: publicProcedure.input(registrationPrepareInputSchema).output(registrationPrepareResultSchema).mutation(contractRouterUnavailable),
+    claim: publicProcedure.output(registrationClaimResultSchema).mutation(contractRouterUnavailable),
+  }),
+  account: router({
+    desktopBrowser: router({
+      status: publicProcedure.output(desktopBrowserStatusSchema).query(contractRouterUnavailable),
+      set: publicProcedure.input(desktopBrowserSetInputSchema).output(desktopBrowserStatusSchema).mutation(contractRouterUnavailable),
+      tunnel: router({
+        start: publicProcedure.input(desktopBrowserTunnelStartInputSchema).output(desktopBrowserTunnelStartResultSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+    proxy: router({
+      get: publicProcedure.output(companyProxyStatusSchema).query(contractRouterUnavailable),
+      set: publicProcedure.input(companyProxySetInputSchema).output(companyProxyStatusSchema).mutation(contractRouterUnavailable),
+      disable: publicProcedure.input(companyProxyDisableInputSchema).output(companyProxyStatusSchema).mutation(contractRouterUnavailable),
+    }),
+    executors: router({
+      list: publicProcedure.output(personalExecutorsListResultSchema).query(contractRouterUnavailable),
+      create: publicProcedure.input(personalExecutorCreateInputSchema).output(personalExecutorMutationResultSchema).mutation(contractRouterUnavailable),
+      rename: publicProcedure.input(personalExecutorRenameInputSchema).output(personalExecutorMutationResultSchema).mutation(contractRouterUnavailable),
+      authorization: router({
+        start: publicProcedure.input(personalExecutorMutationInputSchema).output(executorDeviceAuthorizationStartResultSchema).mutation(contractRouterUnavailable),
+        status: publicProcedure.input(executorDeviceAuthorizationStatusInputSchema).output(executorDeviceAuthorizationStatusResultSchema).query(contractRouterUnavailable),
+        cancel: publicProcedure.input(executorDeviceAuthorizationStatusInputSchema).output(executorDeviceAuthorizationCancelResultSchema).mutation(contractRouterUnavailable),
+        custom: router({
+          configure: publicProcedure.input(executorCustomApiConfigureInputSchema).output(personalExecutorMutationResultSchema).mutation(contractRouterUnavailable),
+        }),
+      }),
+      models: router({
+        catalog: publicProcedure.input(executorModelCatalogInputSchema).output(executorModelCatalogResultSchema).query(contractRouterUnavailable),
+        validate: publicProcedure.input(executorModelValidationInputSchema).output(executorModelValidationResultSchema).mutation(contractRouterUnavailable),
+        policy: publicProcedure.input(personalExecutorMutationInputSchema).output(executorModelPolicyResultSchema).query(contractRouterUnavailable),
+        configure: publicProcedure.input(executorModelPolicyUpdateInputSchema).output(executorModelPolicyResultSchema).mutation(contractRouterUnavailable),
+      }),
+      disconnect: publicProcedure.input(personalExecutorMutationInputSchema).output(personalExecutorMutationResultSchema).mutation(contractRouterUnavailable),
+      share: publicProcedure.input(personalExecutorMutationInputSchema).output(personalExecutorMutationResultSchema).mutation(contractRouterUnavailable),
+      unshare: publicProcedure.input(personalExecutorMutationInputSchema).output(personalExecutorMutationResultSchema).mutation(contractRouterUnavailable),
+      usage: publicProcedure.input(personalExecutorMutationInputSchema).output(personalExecutorUsageResultSchema).query(contractRouterUnavailable),
+      delete: publicProcedure.input(personalExecutorMutationInputSchema).output(executorDeleteResultSchema).mutation(contractRouterUnavailable),
+    }),
+  }),
+  member: router({
+    executor: router({
+      current: publicProcedure.input(memberExecutorCurrentInputSchema).output(memberExecutorAssignmentSchema).query(contractRouterUnavailable),
+      options: publicProcedure.input(memberExecutorCurrentInputSchema).output(memberExecutorOptionsResultSchema).query(contractRouterUnavailable),
+      set: publicProcedure.input(memberExecutorSetInputSchema).output(memberExecutorAssignmentSchema).mutation(contractRouterUnavailable),
+    }),
+  }),
+  desktop: router({
+    notifications: router({
+      events: publicProcedure.input(desktopNotificationEventsInputSchema).output(desktopNotificationEventStreamSchema).subscription(contractRouterUnavailable),
+    }),
+  }),
+  agentBuilder: router({
+    profile: router({
+      get: publicProcedure.input(agentBuilderProfileInputSchema).output(agentBuilderProfileSchema).query(contractRouterUnavailable),
+      update: publicProcedure.input(agentBuilderProfileUpdateInputSchema).output(agentBuilderProfileSchema).mutation(contractRouterUnavailable),
+    }),
+    topic: router({
+      list: publicProcedure.input(agentBuilderTopicListInputSchema).output(agentBuilderTopicListResultSchema).query(contractRouterUnavailable),
+      create: publicProcedure.input(agentBuilderTopicCreateInputSchema).output(agentBuilderTopicSchema).mutation(contractRouterUnavailable),
+      read: publicProcedure.input(agentBuilderTopicReadInputSchema).output(agentBuilderTopicReadResultSchema).query(contractRouterUnavailable),
+    }),
+    turn: router({
+      submit: publicProcedure.input(agentBuilderTurnSubmitInputSchema).output(agentBuilderTurnSubmitResultSchema).mutation(contractRouterUnavailable),
+    }),
+  }),
+  assetBuilder: router({
+    topic: router({
+      list: publicProcedure.input(assetBuilderTopicListInputSchema).output(assetBuilderTopicListResultSchema).query(contractRouterUnavailable),
+      create: publicProcedure.input(assetBuilderTopicCreateInputSchema).output(assetBuilderTopicSchema).mutation(contractRouterUnavailable),
+      read: publicProcedure.input(assetBuilderTopicReadInputSchema).output(assetBuilderTopicReadResultSchema).query(contractRouterUnavailable),
+    }),
+    turn: router({
+      submit: publicProcedure.input(assetBuilderTurnSubmitInputSchema).output(assetBuilderTurnSubmitResultSchema).mutation(contractRouterUnavailable),
+    }),
+  }),
+  roomSideChat: router({
+    read: publicProcedure.input(roomSideChatReadInputSchema).output(roomSideChatReadResultSchema).query(contractRouterUnavailable),
+    turn: router({
+      submit: publicProcedure.input(roomSideChatTurnSubmitInputSchema).output(roomSideChatTurnSubmitResultSchema).mutation(contractRouterUnavailable),
+      events: publicProcedure.input(roomSideChatTurnEventsInputSchema).output(roomSideChatTurnEventStreamSchema).subscription(contractRouterUnavailable),
+    }),
+  }),
+  company: router({
+    registration: router({
+      get: publicProcedure.output(companyRegistrationSettingsSchema).query(contractRouterUnavailable),
+      rotate: publicProcedure.output(companyRegistrationSettingsSchema).mutation(contractRouterUnavailable),
+      setEnabled: publicProcedure.input(companyRegistrationSetEnabledInputSchema).output(companyRegistrationSettingsSchema).mutation(contractRouterUnavailable),
+    }),
+    onboarding: router({
+      status: publicProcedure.output(companyOnboardingStatusSchema).query(contractRouterUnavailable),
+      retry: publicProcedure.output(companyOnboardingRetryResultSchema).mutation(contractRouterUnavailable),
+    }),
+    runtime: router({
+      status: publicProcedure.input(companyRuntimeStatusInputSchema).output(companyRuntimeStatusResultSchema).query(contractRouterUnavailable),
+    }),
+    executors: router({
+      sharedPool: publicProcedure.output(companyExecutorSafeListResultSchema).query(contractRouterUnavailable),
+      blockSharing: publicProcedure.input(companyExecutorSharingGovernanceInputSchema).output(companyExecutorSharingGovernanceResultSchema).mutation(contractRouterUnavailable),
+      unblockSharing: publicProcedure.input(companyExecutorSharingGovernanceInputSchema).output(companyExecutorSharingGovernanceResultSchema).mutation(contractRouterUnavailable),
+    }),
+    actors: router({
+      list: publicProcedure.input(companyActorsListInputSchema).output(companyActorsListResultSchema).query(contractRouterUnavailable),
+      get: publicProcedure.input(companyActorGetInputSchema).output(companyActorSchema).query(contractRouterUnavailable),
+      create: publicProcedure.input(companyActorCreateInputSchema).output(companyActorCreateResultSchema).mutation(contractRouterUnavailable),
+      remove: publicProcedure.input(companyActorRemoveInputSchema).output(companyActorRemoveResultSchema).mutation(contractRouterUnavailable),
+    }),
+    invitations: router({
+      list: publicProcedure.input(companyInvitationsListInputSchema).output(companyInvitationsListResultSchema).query(contractRouterUnavailable),
+    }),
+    files: router({
+      list: publicProcedure.input(companyFileListInputSchema).output(companyFileListResultSchema).query(contractRouterUnavailable),
+      folders: router({
+        create: publicProcedure.input(companyFileFolderCreateInputSchema).output(companyFileFolderSchema).mutation(contractRouterUnavailable),
+        update: publicProcedure.input(companyFileFolderMutationInputSchema).output(companyFileFolderSchema).mutation(contractRouterUnavailable),
+        delete: publicProcedure.input(companyFileFolderMutationInputSchema).output(companyFileFolderDeleteResultSchema).mutation(contractRouterUnavailable),
+      }),
+      upload: router({
+        begin: publicProcedure.input(companyFileUploadBeginInputSchema).output(companyFileUploadReservationSchema).mutation(contractRouterUnavailable),
+        finalize: publicProcedure.input(companyFileUploadFinalizeInputSchema).output(companyFileSchema).mutation(contractRouterUnavailable),
+      }),
+      update: publicProcedure.input(companyFileMutationInputSchema).output(companyFileSchema).mutation(contractRouterUnavailable),
+      delete: publicProcedure.input(companyFileMutationInputSchema).output(companyFileDeleteResultSchema).mutation(contractRouterUnavailable),
+      download: publicProcedure.input(companyFileDownloadInputSchema).output(companyFileDownloadResultSchema).query(contractRouterUnavailable),
+      shares: router({
+        create: publicProcedure.input(companyFileShareCreateInputSchema).output(companyFileShareSchema).mutation(contractRouterUnavailable),
+        list: publicProcedure.input(companyFileShareListInputSchema).output(companyFileShareListResultSchema).query(contractRouterUnavailable),
+        revoke: publicProcedure.input(companyFileShareRevokeInputSchema).output(companyFileShareRevokeResultSchema).mutation(contractRouterUnavailable),
+        resolve: publicProcedure.input(companyFileShareResolveInputSchema).output(companyFileShareResolveResultSchema).query(contractRouterUnavailable),
+      }),
+    }),
+    members: router({
+      assets: router({
+        current: publicProcedure.input(memberAssetCurrentInputSchema).output(memberAssetProfileSchema).query(contractRouterUnavailable),
+        options: publicProcedure.input(memberAssetOptionsInputSchema).output(memberAssetOptionsResultSchema).query(contractRouterUnavailable),
+        applyInstallation: publicProcedure.input(memberAssetApplyInputSchema).output(memberAssetProfileSchema).mutation(contractRouterUnavailable),
+        operation: publicProcedure.input(memberAssetOperationInputSchema).output(memberAssetOperationSchema).query(contractRouterUnavailable),
+      }),
+      executor: router({
+        current: publicProcedure.input(companyMemberExecutorInputSchema).output(memberExecutorAssignmentSchema).query(contractRouterUnavailable),
+        options: publicProcedure.input(companyMemberExecutorInputSchema).output(memberExecutorOptionsResultSchema).query(contractRouterUnavailable),
+        set: publicProcedure.input(companyMemberExecutorSetInputSchema).output(memberExecutorAssignmentSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+  }),
+  home: router({
+    conversationImport: router({
+      read: publicProcedure.input(homeConversationImportReadInputSchema).output(homeConversationImportSchema).query(contractRouterUnavailable),
+    }),
+    memory: router({
+      get: publicProcedure.input(homeMemoryInputSchema).output(homeMemoryProfileSchema).query(contractRouterUnavailable),
+      set: publicProcedure.input(homeMemoryUpdateInputSchema).output(homeMemoryProfileSchema).mutation(contractRouterUnavailable),
+    }),
+    model: router({
+      options: publicProcedure.input(homeModelOptionsInputSchema).output(homeModelOptionsResultSchema).query(contractRouterUnavailable),
+    }),
+    project: router({
+      list: publicProcedure.input(homeProjectListInputSchema).output(homeProjectListResultSchema).query(contractRouterUnavailable),
+      create: publicProcedure.input(homeProjectCreateInputSchema).output(homeProjectSchema).mutation(contractRouterUnavailable),
+      update: publicProcedure.input(homeProjectUpdateInputSchema).output(homeProjectSchema).mutation(contractRouterUnavailable),
+      delete: publicProcedure.input(homeProjectDeleteInputSchema).output(homeProjectDeleteResultSchema).mutation(contractRouterUnavailable),
+      thread: router({
+        move: publicProcedure.input(homeProjectThreadMoveInputSchema).output(homeProjectThreadMoveResultSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+    thread: router({
+      list: publicProcedure.input(homeThreadListInputSchema).output(homeThreadListResultSchema).query(contractRouterUnavailable),
+      delete: publicProcedure.input(homeThreadDeleteInputSchema).output(homeThreadDeleteResultSchema).mutation(contractRouterUnavailable),
+      fork: publicProcedure.input(homeThreadForkInputSchema).output(homeThreadForkResultSchema).mutation(contractRouterUnavailable),
+      search: publicProcedure.input(homeThreadSearchInputSchema).output(homeThreadSearchResultSchema).query(contractRouterUnavailable),
+      read: publicProcedure.input(homeThreadReadInputSchema).output(homeThreadReadResultSchema).query(contractRouterUnavailable),
+      select: publicProcedure.input(homeThreadSelectInputSchema).output(homeThreadSelectResultSchema).mutation(contractRouterUnavailable),
+      settings: router({
+        get: publicProcedure.input(homeThreadSettingsInputSchema).output(homeThreadSettingsResultSchema).query(contractRouterUnavailable),
+        set: publicProcedure.input(homeThreadSettingsSetInputSchema).output(homeThreadSettingsResultSchema).mutation(contractRouterUnavailable),
+      }),
+    }),
+    turn: router({
+      submit: publicProcedure.input(homeTurnSubmitInputSchema).output(homeTurnSubmitResultSchema).mutation(contractRouterUnavailable),
+      events: publicProcedure.input(homeTurnEventsInputSchema).output(homeTurnEventStreamSchema).subscription(contractRouterUnavailable),
+      respondToQuestion: publicProcedure
+        .input(homeQuestionInteractionRespondInputSchema)
+        .output(homeQuestionInteractionRespondResultSchema)
+        .mutation(contractRouterUnavailable),
+      snoozeQuestion: publicProcedure
+        .input(homeQuestionInteractionSnoozeInputSchema)
+        .output(homeQuestionInteractionSnoozeResultSchema)
+        .mutation(contractRouterUnavailable),
+    }),
+    filesystem: router({
+      list: publicProcedure.input(homeFilesystemListInputSchema).output(homeFilesystemListResultSchema).query(contractRouterUnavailable),
+      create: publicProcedure.input(homeFilesystemCreateInputSchema).output(homeFilesystemEntrySchema).mutation(contractRouterUnavailable),
+      rename: publicProcedure.input(homeFilesystemRenameInputSchema).output(homeFilesystemEntrySchema).mutation(contractRouterUnavailable),
+      delete: publicProcedure.input(homeFilesystemDeleteInputSchema).output(homeFilesystemDeleteResultSchema).mutation(contractRouterUnavailable),
+      events: publicProcedure.input(homeFilesystemEventsInputSchema).output(homeFilesystemEventStreamSchema).subscription(contractRouterUnavailable),
+    }),
+  }),
+  scheduledTasks: router({
+    list: publicProcedure.input(scheduledTaskListInputSchema).output(scheduledTaskListResultSchema).query(contractRouterUnavailable),
+    get: publicProcedure.input(scheduledTaskGetInputSchema).output(scheduledTaskSummarySchema).query(contractRouterUnavailable),
+    create: publicProcedure.input(scheduledTaskCreateInputSchema).output(scheduledTaskSummarySchema).mutation(contractRouterUnavailable),
+    update: publicProcedure.input(scheduledTaskUpdateInputSchema).output(scheduledTaskSummarySchema).mutation(contractRouterUnavailable),
+    pause: publicProcedure.input(scheduledTaskVersionMutationInputSchema).output(scheduledTaskSummarySchema).mutation(contractRouterUnavailable),
+    resume: publicProcedure.input(scheduledTaskVersionMutationInputSchema).output(scheduledTaskSummarySchema).mutation(contractRouterUnavailable),
+    runNow: publicProcedure.input(scheduledTaskVersionMutationInputSchema).output(scheduledTaskSummarySchema).mutation(contractRouterUnavailable),
+    softDelete: publicProcedure.input(scheduledTaskVersionMutationInputSchema).output(scheduledTaskDeleteResultSchema).mutation(contractRouterUnavailable),
+    runs: router({
+      list: publicProcedure.input(scheduledTaskRunsListInputSchema).output(scheduledTaskRunsListResultSchema).query(contractRouterUnavailable),
+    }),
+  }),
+  room: router({
+    create: publicProcedure.input(roomCreateInputSchema).output(roomCreateResultSchema).mutation(contractRouterUnavailable),
+    list: publicProcedure.input(roomListInputSchema).output(roomListResultSchema).query(contractRouterUnavailable),
+    members: router({
+      list: publicProcedure.input(roomMembersListInputSchema).output(roomMembersListResultSchema).query(contractRouterUnavailable),
+      add: publicProcedure.input(roomMembersAddInputSchema).output(roomMembersAddResultSchema).mutation(contractRouterUnavailable),
+      remove: publicProcedure.input(roomMembersRemoveInputSchema).output(roomMembersRemoveResultSchema).mutation(contractRouterUnavailable),
+    }),
+    agents: router({
+      triggerPolicy: router({
+        get: publicProcedure.input(roomAgentTriggerPolicyInputSchema).output(roomAgentTriggerPolicyResultSchema).query(contractRouterUnavailable),
+        set: publicProcedure.input(roomAgentTriggerPolicySetInputSchema).output(roomAgentTriggerPolicyResultSchema).mutation(contractRouterUnavailable),
+      }),
+      execution: router({
+        get: publicProcedure.input(roomAgentExecutionGetInputSchema).output(agentRoomExecutionSummarySchema).query(contractRouterUnavailable),
+      }),
+    }),
+    messages: router({
+      context: publicProcedure.input(roomMessageContextInputSchema).output(roomMessagesListResultSchema).query(contractRouterUnavailable),
+      list: publicProcedure.input(roomMessagesListInputSchema).output(roomMessagesListResultSchema).query(contractRouterUnavailable),
+      send: publicProcedure.input(roomMessageSendInputSchema).output(roomMessageSendResultSchema).mutation(contractRouterUnavailable),
+      edit: publicProcedure.input(roomMessageEditInputSchema).output(roomMessageMutationResultSchema).mutation(contractRouterUnavailable),
+      softDelete: publicProcedure.input(roomMessageSoftDeleteInputSchema).output(roomMessageMutationResultSchema).mutation(contractRouterUnavailable),
+      regenerate: publicProcedure.input(roomAgentReplyRegenerateInputSchema).output(roomAgentReplyRegenerateResultSchema).mutation(contractRouterUnavailable),
+      selectVersion: publicProcedure.input(roomAgentReplySelectionSetInputSchema).output(roomAgentReplySelectionResultSchema).mutation(contractRouterUnavailable),
+      events: publicProcedure.input(roomMessagesEventsInputSchema).output(roomMessageEventStreamSchema).subscription(contractRouterUnavailable),
+    }),
+    agentActivity: router({
+      watch: publicProcedure.input(roomAgentActivityWatchInputSchema).output(roomAgentTurnEventStreamSchema).subscription(contractRouterUnavailable),
+    }),
+    threads: router({
+      read: publicProcedure.input(roomThreadReadInputSchema).output(roomThreadReadResultSchema).query(contractRouterUnavailable),
+    }),
+    interactions: router({
+      respond: publicProcedure.input(roomInteractionRespondInputSchema).output(roomInteractionRespondResultSchema).mutation(contractRouterUnavailable),
+      snooze: publicProcedure.input(roomInteractionSnoozeInputSchema).output(roomInteractionSnoozeResultSchema).mutation(contractRouterUnavailable),
+    }),
+  }),
+});
+
+export type BackendRouter = typeof backendRouter;

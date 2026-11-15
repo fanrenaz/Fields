@@ -1,0 +1,17 @@
+export {
+  decideRoomMembershipChange,
+  initialRoomMembershipVersion,
+  membershipChangeIncrementsVersion,
+  nextRoomMembershipVersion,
+  roomMembershipRoles,
+  roomMembershipStatuses,
+  roomStatuses,
+  RoomOwnerRemovalError,
+  type Room,
+  type RoomMembership,
+  type RoomMembershipChange,
+  type RoomMembershipMutation,
+  type RoomMembershipRole,
+  type RoomMembershipStatus,
+  type RoomStatus,
+} from "./room.js";

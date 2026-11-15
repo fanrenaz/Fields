@@ -1,0 +1,199 @@
+{
+  "name": "@fields/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./public/agent-activity": {
+      "types": "./dist/public/agent-activity.d.ts",
+      "import": "./dist/public/agent-activity.js",
+      "require": "./dist/public/agent-activity.js"
+    },
+    "./public/agent-room": {
+      "types": "./dist/public/agent-room.d.ts",
+      "import": "./dist/public/agent-room.js",
+      "require": "./dist/public/agent-room.js"
+    },
+    "./public/agent-builder": {
+      "types": "./dist/public/agent-builder.d.ts",
+      "import": "./dist/public/agent-builder.js",
+      "require": "./dist/public/agent-builder.js"
+    },
+    "./public/asset": {
+      "types": "./dist/public/asset.d.ts",
+      "import": "./dist/public/asset.js",
+      "require": "./dist/public/asset.js"
+    },
+    "./public/asset-builder": {
+      "types": "./dist/public/asset-builder.d.ts",
+      "import": "./dist/public/asset-builder.js",
+      "require": "./dist/public/asset-builder.js"
+    },
+    "./public/company": {
+      "types": "./dist/public/company.d.ts",
+      "import": "./dist/public/company.js",
+      "require": "./dist/public/company.js"
+    },
+    "./public/company-file": {
+      "types": "./dist/public/company-file.d.ts",
+      "import": "./dist/public/company-file.js",
+      "require": "./dist/public/company-file.js"
+    },
+    "./public/desktop-browser": {
+      "types": "./dist/public/desktop-browser.d.ts",
+      "import": "./dist/public/desktop-browser.js",
+      "require": "./dist/public/desktop-browser.js"
+    },
+    "./public/desktop-notification": {
+      "types": "./dist/public/desktop-notification.d.ts",
+      "import": "./dist/public/desktop-notification.js",
+      "require": "./dist/public/desktop-notification.js"
+    },
+    "./public/embodiment": {
+      "types": "./dist/public/embodiment.d.ts",
+      "import": "./dist/public/embodiment.js",
+      "require": "./dist/public/embodiment.js"
+    },
+    "./public/executor": {
+      "types": "./dist/public/executor.d.ts",
+      "import": "./dist/public/executor.js",
+      "require": "./dist/public/executor.js"
+    },
+    "./public/home": {
+      "types": "./dist/public/home.d.ts",
+      "import": "./dist/public/home.js",
+      "require": "./dist/public/home.js"
+    },
+    "./public/mail": {
+      "types": "./dist/public/mail.d.ts",
+      "import": "./dist/public/mail.js",
+      "require": "./dist/public/mail.js"
+    },
+    "./public/message-attachment": {
+      "types": "./dist/public/message-attachment.d.ts",
+      "import": "./dist/public/message-attachment.js",
+      "require": "./dist/public/message-attachment.js"
+    },
+    "./public/notification": {
+      "types": "./dist/public/notification.d.ts",
+      "import": "./dist/public/notification.js",
+      "require": "./dist/public/notification.js"
+    },
+    "./public/observability": {
+      "types": "./dist/public/observability.d.ts",
+      "import": "./dist/public/observability.js",
+      "require": "./dist/public/observability.js"
+    },
+    "./public/room": {
+      "types": "./dist/public/room.d.ts",
+      "import": "./dist/public/room.js",
+      "require": "./dist/public/room.js"
+    },
+    "./public/room-side-chat": {
+      "types": "./dist/public/room-side-chat.d.ts",
+      "import": "./dist/public/room-side-chat.js",
+      "require": "./dist/public/room-side-chat.js"
+    },
+    "./public/search": {
+      "types": "./dist/public/search.d.ts",
+      "import": "./dist/public/search.js",
+      "require": "./dist/public/search.js"
+    },
+    "./public/scheduled-task": {
+      "types": "./dist/public/scheduled-task.d.ts",
+      "import": "./dist/public/scheduled-task.js",
+      "require": "./dist/public/scheduled-task.js"
+    },
+    "./router/backend": {
+      "types": "./dist/router/backend.d.ts",
+      "import": "./dist/router/backend.js",
+      "require": "./dist/router/backend.js"
+    },
+    "./internal/agent-runtime": {
+      "types": "./dist/internal/agent-runtime.d.ts",
+      "import": "./dist/internal/agent-runtime.js",
+      "require": "./dist/internal/agent-runtime.js"
+    },
+    "./internal/member-memory": {
+      "types": "./dist/internal/member-memory.d.ts",
+      "import": "./dist/internal/member-memory.js",
+      "require": "./dist/internal/member-memory.js"
+    },
+    "./internal/notification": {
+      "types": "./dist/internal/notification.d.ts",
+      "import": "./dist/internal/notification.js",
+      "require": "./dist/internal/notification.js"
+    },
+    "./internal/company-runtime": {
+      "types": "./dist/internal/company-runtime.d.ts",
+      "import": "./dist/internal/company-runtime.js",
+      "require": "./dist/internal/company-runtime.js"
+    },
+    "./internal/mail": {
+      "types": "./dist/internal/mail.d.ts",
+      "import": "./dist/internal/mail.js",
+      "require": "./dist/internal/mail.js"
+    },
+    "./internal/router/backend-runtime": {
+      "types": "./dist/internal/router/backend-runtime.d.ts",
+      "import": "./dist/internal/router/backend-runtime.js",
+      "require": "./dist/internal/router/backend-runtime.js"
+    },
+    "./internal/router/company-runtime": {
+      "types": "./dist/internal/router/company-runtime.d.ts",
+      "import": "./dist/internal/router/company-runtime.js",
+      "require": "./dist/internal/router/company-runtime.js"
+    },
+    "./internal/agent-room": {
+      "types": "./dist/internal/agent-room.d.ts",
+      "import": "./dist/internal/agent-room.js",
+      "require": "./dist/internal/agent-room.js"
+    },
+    "./internal/asset": {
+      "types": "./dist/internal/asset.d.ts",
+      "import": "./dist/internal/asset.js",
+      "require": "./dist/internal/asset.js"
+    },
+    "./internal/backend-runtime": {
+      "types": "./dist/internal/backend-runtime.d.ts",
+      "import": "./dist/internal/backend-runtime.js",
+      "require": "./dist/internal/backend-runtime.js"
+    },
+    "./internal/embodiment-runtime": {
+      "types": "./dist/internal/embodiment-runtime.d.ts",
+      "import": "./dist/internal/embodiment-runtime.js",
+      "require": "./dist/internal/embodiment-runtime.js"
+    },
+    "./codex-app-server-protocol": {
+      "types": "./dist/generated/codex-app-server-protocol/index.d.ts",
+      "import": "./dist/generated/codex-app-server-protocol/index.js",
+      "require": "./dist/generated/codex-app-server-protocol/index.js"
+    },
+    "./codex-app-server-protocol/v2": {
+      "types": "./dist/generated/codex-app-server-protocol/v2/index.d.ts",
+      "import": "./dist/generated/codex-app-server-protocol/v2/index.js",
+      "require": "./dist/generated/codex-app-server-protocol/v2/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc --watch -p tsconfig.build.json --preserveWatchOutput",
+    "generate:codex-protocol": "node scripts/generate-codex-protocol.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "pnpm run build && node --test tests/*.test.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@trpc/server": "^11.7.2",
+    "zod": "^4.2.1"
+  },
+  "devDependencies": {
+    "@fields/eslint-config": "workspace:*",
+    "@types/node": "^22.19.21",
+    "typescript": "6.0.3"
+  }
+}

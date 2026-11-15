@@ -1,0 +1,12 @@
+[submodule "embodiments/simulator/third_party/lv_m5_emulator"]
+	path = embodiments/simulator/third_party/lv_m5_emulator
+	url = https://github.com/m5stack/lv_m5_emulator.git
+[submodule "embodiments/firmware/StickS3_Call/third_party/ArduinoJson"]
+	path = embodiments/firmware/StickS3_Call/third_party/ArduinoJson
+	url = https://github.com/bblanchon/ArduinoJson.git
+[submodule "embodiments/simulator/third_party/lvgl"]
+	path = embodiments/simulator/third_party/lvgl
+	url = https://github.com/lvgl/lvgl.git
+[submodule "embodiments/firmware/StickS3_Call/third_party/M5GFX"]
+	path = embodiments/firmware/StickS3_Call/third_party/M5GFX
+	url = https://github.com/m5stack/M5GFX.git

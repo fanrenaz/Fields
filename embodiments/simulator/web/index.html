@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <meta name="pc-session-nonce" content="__PC_SESSION_NONCE__">
+    <meta name="pc-base-path" content="__PC_BASE_PATH__">
+    <title>StickS3 PC 软终端</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="device-stage">
+      <section class="device" aria-label="StickS3 虚拟设备">
+        <div class="device-top" aria-hidden="true"><span></span><span></span></div>
+        <div class="screen-bezel">
+          <canvas id="device-screen" width="240" height="135" tabindex="0" aria-label="StickS3 设备屏幕。按 A 或 B 操作。"></canvas>
+        </div>
+        <div class="device-buttons" aria-hidden="true"><span>A</span><span>B</span></div>
+      </section>
+
+      <section id="activation-overlay" class="activation-overlay" aria-live="polite">
+        <div class="activation-card">
+          <p>StickS3 Call</p>
+          <h1>启用电脑音频</h1>
+          <button id="activate-button" type="button">启用</button>
+          <span id="activation-error" role="alert" hidden></span>
+        </div>
+      </section>
+      <p id="accessibility-status" class="sr-only" aria-live="polite"></p>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

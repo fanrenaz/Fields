@@ -1,0 +1,2 @@
+ALTER TABLE "home_agent_executor_assignments" ADD COLUMN "session_state" varchar(32) DEFAULT 'stopped' NOT NULL;--> statement-breakpoint
+ALTER TABLE "home_agent_executor_assignments" ADD CONSTRAINT "home_agent_executor_assignments_session_state_check" CHECK ("home_agent_executor_assignments"."session_state" in ('preparing', 'ready', 'draining', 'auth_required', 'failed', 'stopped'));
